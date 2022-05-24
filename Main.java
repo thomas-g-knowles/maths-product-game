@@ -1,7 +1,7 @@
 // TODO: Could add difficulty selector to provide different levels of challenge where the lower bound is made bigger for each difficulty.
 // TODO: Implement system to judge diffculty of question and reward more ===>>> perhaps if the product of nums is prime or odd etc. it is considereed harder than others.
 // TODO: Use argv to allow user to request score file ===>>> read contents and System.out.println(fileContents/scores).
-
+// TODO: Save highest streak per game ===>>> before streak wipe add to array, at end of game iterate through array and find largest number (bubble sort and grab first/last index).
 package mathsGame;
 
 import java.util.Scanner;
@@ -43,7 +43,8 @@ public class Main {
         streak += 1;
 
         if (answerTime < 1.5) score += 1 * streak * 10;
-        else if (answerTime < 2)score += 1 * streak * 5;
+        else if (answerTime < 2)score += 1 * streak * 7;
+        else if (answerTime < 2.5)score += 1 * streak * 4;
         else score += 1 * streak;
 
         System.out.println("\nCorrect! (score: " + score + ")");
@@ -84,7 +85,7 @@ public class Main {
         System.out.println("An error occured");
         e.printStackTrace();
       }
-      System.exit(1);
+      System.exit(0);
     }
   }
 }
