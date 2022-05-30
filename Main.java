@@ -46,7 +46,6 @@ public class Main {
         else if (answerTime < 2)score += 1 * streak * 7;
         else if (answerTime < 2.5)score += 1 * streak * 4;
         else score += 1 * streak;
-
         System.out.println("\nCorrect! (score: " + score + ")");
 
       } else {
