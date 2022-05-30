@@ -27,25 +27,42 @@ public class Main {
     executorService.scheduleAtFixedRate(Main::timer, 0, 1, TimeUnit.SECONDS);
 
     while (time > 0) {
-      
+
       System.out.println("\nTime remaining: " + time + " seconds");
 
       int int1 = rand.nextInt(13);
       int int2 = rand.nextInt(13);
 
-      System.out.println("\n" + int1 + "x" + int2 + ":");
       float startTime = System.nanoTime();
-      int userAnswer = scan.nextInt();
+
+      int userAnswer = 0; // Initialising to 0 so Java doesn't whine at me.
+
+      boolean answerGiven = false;
+      while (!answerGiven) { // Could just use break instead - however potentially less semantic?
+        try {
+          System.out.println("\n" + int1 + "x" + int2 + ":");
+          userAnswer = scan.nextInt();
+          answerGiven = true;
+        } catch (Exception e) {
+          System.out.println("You must enter a number based input! int please :<)");
+          scan.nextLine();
+        }
+      }
+
       float endTime = System.nanoTime();
-      float answerTime = ((endTime - startTime) / 1000000000);
-      
+      float answerTime = ((endTime - startTime) / 1000000000); // Divison converts to seconds
+
       if (userAnswer == int1 * int2) {
         streak += 1;
 
-        if (answerTime < 1.5) score += 1 * streak * 10;
-        else if (answerTime < 2)score += 1 * streak * 7;
-        else if (answerTime < 2.5)score += 1 * streak * 4;
-        else score += 1 * streak;
+        if (answerTime < 1.5)
+          score += 1 * streak * 10;
+        else if (answerTime < 2)
+          score += 1 * streak * 7;
+        else if (answerTime < 2.5)
+          score += 1 * streak * 4;
+        else
+          score += 1 * streak;
         System.out.println("\nCorrect! (score: " + score + ")");
 
       } else {
@@ -54,30 +71,28 @@ public class Main {
       }
     }
 
+    // Currently never executed due to my only known method of interupting system
+    // input - which is sys exit killing the program at ln 96.
     scan.close();
     executorService.shutdown();
 
   }
 
-
   public static void timer() {
     time -= 1;
     if (time == 0) {
-      System.out.println("\n---------------- Time Up! ----------------\n\nYou scored: " + score + " with a streak of: " + streak + "\n");
+      System.out.println("\n---------------- Time Up! ----------------\n\nYou scored: " + score + " with a streak of: "
+          + streak + "\n");
       try {
         File myObj = new File("scores.txt");
         if (myObj.createNewFile()) {
-          System.out.println("File created: " + myObj.getName());
           FileWriter myWriter = new FileWriter("scores.txt", true);
           myWriter.write("Score: " + score + "\n\n");
           myWriter.close();
-          System.out.println("Successfully wrote to the file.");
         } else {
-          System.out.println("File already exists.");
           FileWriter myWriter = new FileWriter("scores.txt", true);
           myWriter.write("Score: " + score + "\n\n");
           myWriter.close();
-          System.out.println("Successfully wrote to the file.");
         }
 
       } catch (IOException e) {
