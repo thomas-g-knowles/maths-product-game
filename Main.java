@@ -32,6 +32,7 @@ public class Main {
 
       System.out.println("\nTime remaining: " + time + " seconds");
 
+      // These vars are declared over and over in loop - is this bad practice, declare once perhaps outside of loop scope?
       int int1 = rand.nextInt(13);
       int int2 = rand.nextInt(13);
       int userAnswer = 0; // Initialising to 0 so Java doesn't whine at me.
