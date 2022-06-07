@@ -15,6 +15,7 @@ import java.io.IOException; // Import the IOException class to handle errors
 
 public class Main {
 
+  // Declared as class attributes because they need to accessed from both methods - is this good practice?
   static Scanner scan = new Scanner(System.in); // Scanner initialization and declaration
   static Random rand = new Random();
   static int time = 60;
@@ -26,18 +27,17 @@ public class Main {
     final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     executorService.scheduleAtFixedRate(Main::timer, 0, 1, TimeUnit.SECONDS);
 
+    // Will keep asking user for answer to questions until time has expired:
     while (time > 0) {
 
       System.out.println("\nTime remaining: " + time + " seconds");
 
       int int1 = rand.nextInt(13);
       int int2 = rand.nextInt(13);
-
-      float startTime = System.nanoTime();
-
       int userAnswer = 0; // Initialising to 0 so Java doesn't whine at me.
-
       boolean answerGiven = false;
+      float startTime = System.nanoTime(); // Starts timing user for their answer:
+
       while (!answerGiven) { // Could just use break instead - however potentially less semantic?
         try {
           System.out.println("\n" + int1 + "x" + int2 + ":");
@@ -49,12 +49,14 @@ public class Main {
         }
       }
 
+      // Calculates the time taken by user to answer question:
       float endTime = System.nanoTime();
       float answerTime = ((endTime - startTime) / 1000000000); // Divison converts to seconds
 
+      // Selection block bascially determines the points added to the score based on how fast user answer question and if correct or not:
       if (userAnswer == int1 * int2) {
         streak += 1;
-
+        // Faster the correct answer is given, the larger the score multiplier:
         if (answerTime < 1.5)
           score += 1 * streak * 10;
         else if (answerTime < 2)
@@ -64,20 +66,17 @@ public class Main {
         else
           score += 1 * streak;
         System.out.println("\nCorrect! (score: " + score + ")");
-
-      } else {
+      } else { // If user does not input the correct answer to the question:
         streak = 0;
         System.out.println("\n(" + int1 * int2 + ") " + "Incorrect! (score: " + score + ")");
       }
     }
-
-    // Currently never executed due to my only known method of interupting system
-    // input - which is sys exit killing the program at ln 96.
+    // Currently never executed due to my only known method of interupting system input - which is sys exit killing the program.
     scan.close();
     executorService.shutdown();
-
   }
 
+  // Timer method is invoked in separate thread of executuion, so can run in background - main thread is obviously blocking especially scanner:
   public static void timer() {
     time -= 1;
     if (time == 0) {
@@ -94,7 +93,6 @@ public class Main {
           myWriter.write("Score: " + score + "\n\n");
           myWriter.close();
         }
-
       } catch (IOException e) {
         System.out.println("An error occured");
         e.printStackTrace();
